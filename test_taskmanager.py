@@ -12,7 +12,7 @@ from taskmanagerdb import vytvoreni_db_a_tabulky  # funkce pro vytvoření DB a 
 # - pokud TEST_DB je nastavena na '1', použije se testovací DB
 # - jinak se použije hlavní DB
 
-USE_TEST_DB = os.getenv("TEST_DB") == "0"
+USE_TEST_DB = os.getenv("TEST_DB") == "1"
 
 # Název DB dle volby
 DB_NAME = "task_manager_test" if USE_TEST_DB else "task_manager"
