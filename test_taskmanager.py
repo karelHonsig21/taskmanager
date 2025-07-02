@@ -1,7 +1,21 @@
 # Import knihoven
 import pytest  # framework pro testování
 import mysql.connector  # knihovna pro připojení k MySQL
+import os  # pro práci s proměnnými prostředí
 from taskmanagerdb import vytvoreni_db_a_tabulky  # funkce pro vytvoření DB a tabulky
+
+# ================================
+# KONFIGURACE DB
+# ================================
+
+# Možnost volby databáze pomocí proměnné prostředí TEST_DB:
+# - pokud TEST_DB je nastavena na '1', použije se testovací DB
+# - jinak se použije hlavní DB
+
+USE_TEST_DB = os.getenv("TEST_DB") == "0"
+
+# Název DB dle volby
+DB_NAME = "task_manager_test" if USE_TEST_DB else "task_manager"
 
 # ================================
 # FIXTURES – společné pro více testů
@@ -13,12 +27,12 @@ def db_conn():
     Fixture pro připojení k DB.
     Spustí se jednou pro celý soubor (scope="module").
     """
-    # Vytvoření připojení k databázi (může být hlavní nebo testovací)
+    # Vytvoření připojení k databázi (hlavní nebo testovací)
     conn = mysql.connector.connect(
         host="localhost",
         user="root",
         password="12345",  # Změň dle svého hesla
-        database="task_manager"  # Název DB
+        database=DB_NAME
     )
     # Vytvoření DB a tabulky, pokud ještě neexistují
     vytvoreni_db_a_tabulky(conn)
